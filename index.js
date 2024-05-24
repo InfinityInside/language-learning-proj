@@ -6,6 +6,7 @@ const { readConfig,
     writeDefaultConfig,
     getLanguages
 } = require('./utils/fileManager');
+const Practice = require('./utils/practiceFunctions');
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -23,7 +24,7 @@ const showMenu = () => {
     2. View words
     3. Change language
     4. Remove a word
-   
+    5. Practice
     10. Exit
     `);
     rl.prompt();
@@ -66,14 +67,12 @@ const changeLanguage = () => {
 
         const num = +input
         if (num) {
-            console.log("num")
             if (num >= 1 && num <= languages.length) {
                 currentLanguage = languages[num-1]
             } else {
                 console.log("Invalid number.")
             }
         } else {
-            console.log("str")
             currentLanguage = input.trim()
         }
         config = readConfig(currentLanguage)
@@ -146,7 +145,10 @@ rl.on('line', (line) => {
         case '4':
             removeWord();
             break;
-
+        case '5':
+            const practice = new Practice(rl, config, showMenu);
+            practice.start();
+            break;
         case '10':
             rl.close();
             break;
@@ -162,4 +164,3 @@ rl.on('line', (line) => {
 
 console.log('Welcome to the Language Learning CLI!');
 showMenu();
-

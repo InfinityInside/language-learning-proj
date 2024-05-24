@@ -8,7 +8,7 @@ const readConfig = (language) => {
         return [];
     }
     const data = fs.readFileSync(filePath, 'utf8');
-    return data.split('\n').map(line => {
+    return data.split('\n').filter(line => line).map(line => {
         const [nativeWord, learnedWord, nativeDefinition, learnedDefinition] = line.split(';-;');
         return { nativeWord, learnedWord, nativeDefinition, learnedDefinition };
     });
