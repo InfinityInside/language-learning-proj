@@ -102,36 +102,36 @@ const removeWord = () => {
     });
 };
 
-const updateWord = () => {
-    rl.question('Enter the index of the word to update: ', (index) => {
-        const wordIndex = parseInt(index) - 1;
-        if (wordIndex >= 0 && wordIndex < config.length) {
-            const word = config[wordIndex];
-            rl.question(`Enter the new word in your language (current: ${word.nativeWord}): `, (nativeWord) => {
-                rl.question(`Enter the new word in the language you learn (current: ${word.learnedWord}): `, (learnedWord) => {
-                    rl.question(`Enter the new definition in your language (current: ${word.nativeDefinition}): `, (nativeDefinition) => {
-                        rl.question(`Enter the new definition in the language you learn (current: ${word.learnedDefinition}): `, (learnedDefinition) => {
-                            config[wordIndex] = {
-                                nativeWord: nativeWord || word.nativeWord,
-                                learnedWord: learnedWord || word.learnedWord,
-                                nativeDefinition: nativeDefinition || word.nativeDefinition,
-                                learnedDefinition: learnedDefinition || word.learnedDefinition
-                            };
-                            rewriteConfig(currentLanguage, config);
-                            console.log('Word updated successfully!');
-                            showMenu();
-                        });
-                    });
-                });
-            });
-        } else {
-            console.log('Invalid index.');
-            showMenu();
-        }
-    });
-};
+// const updateWord = () => {
+//     rl.question('Enter the index of the word to update: ', (index) => {
+//         const wordIndex = parseInt(index) - 1;
+//         if (wordIndex >= 0 && wordIndex < config.length) {
+//             const word = config[wordIndex];
+//             rl.question(`Enter the new word in your language (current: ${word.nativeWord}): `, (nativeWord) => {
+//                 rl.question(`Enter the new word in the language you learn (current: ${word.learnedWord}): `, (learnedWord) => {
+//                     rl.question(`Enter the new definition in your language (current: ${word.nativeDefinition}): `, (nativeDefinition) => {
+//                         rl.question(`Enter the new definition in the language you learn (current: ${word.learnedDefinition}): `, (learnedDefinition) => {
+//                             config[wordIndex] = {
+//                                 nativeWord: nativeWord || word.nativeWord,
+//                                 learnedWord: learnedWord || word.learnedWord,
+//                                 nativeDefinition: nativeDefinition || word.nativeDefinition,
+//                                 learnedDefinition: learnedDefinition || word.learnedDefinition
+//                             };
+//                             rewriteConfig(currentLanguage, config);
+//                             console.log('Word updated successfully!');
+//                             showMenu();
+//                         });
+//                     });
+//                 });
+//             });
+//         } else {
+//             console.log('Invalid index.');
+//             showMenu();
+//         }
+//     });
+// };
 
-rl.on('line', (line) => {
+rl.on('line', async (line) => {
     switch (line.trim()) {
         case '1':
             addWord();
@@ -147,7 +147,7 @@ rl.on('line', (line) => {
             break;
         case '5':
             const practice = new Practice(rl, config, showMenu);
-            practice.start();
+            await practice.start();
             break;
         case '10':
             rl.close();
