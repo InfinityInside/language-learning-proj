@@ -9,21 +9,21 @@ const readConfig = (language) => {
     }
     const data = fs.readFileSync(filePath, 'utf8');
     return data.split('\n').filter(line => line).map(line => {
-        const [nativeWord, learnedWord, nativeDefinition, learnedDefinition] = line.split(';-;');
-        return { nativeWord, learnedWord, nativeDefinition, learnedDefinition };
+        const [nativeWord, learnedWord, learnedDefinition] = line.split(';-;');
+        return { nativeWord, learnedWord, learnedDefinition };
     });
 };
 
 const appendToConfig = (language, word) => {
     const filePath = `config/${language}.txt`;
-    const line = `${word.nativeWord};-;${word.learnedWord};-;${word.nativeDefinition};-;${word.learnedDefinition}\n`;
+    const line = `${word.nativeWord};-;${word.learnedWord};-;${word.learnedDefinition}\n`;
     fs.appendFileSync(filePath, line);
 };
 
 const rewriteConfig = (language, config) => {
     const filePath = `config/${language}.txt`;
     const data = config.map(word =>
-        `${word.nativeWord};-;${word.learnedWord};-;${word.nativeDefinition};-;${word.learnedDefinition}`
+        `${word.nativeWord};-;${word.learnedWord};-;${word.learnedDefinition}`
     ).join('\n');
     fs.writeFileSync(filePath, data);
 };
@@ -43,11 +43,8 @@ const writeDefaultConfig = (defaultLanguage) => {
     fs.writeFileSync(filePath, defaultLanguage);
 };
 
-const getLanguages = () => {
-    const files = fs.readdirSync("config")
+const getLanguages = () => fs.readdirSync("config")
         .filter((value) => value !== 'defaultConfig.txt')
-        .map((value) => value.slice(0, value.lastIndexOf('.')))
-    return files;
-}
+        .map((value) => value.slice(0, value.lastIndexOf('.')));
 
 module.exports = { readConfig, appendToConfig, rewriteConfig, readDefaultConfig, writeDefaultConfig, getLanguages };

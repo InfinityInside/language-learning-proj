@@ -1,4 +1,4 @@
-const readline = require('readline');
+const readline = require("readline");
 const {
     readConfig,
     appendToConfig,
@@ -6,7 +6,7 @@ const {
     readDefaultConfig,
     writeDefaultConfig,
     getLanguages
-} = require('./fileManager');
+} = require("./fileManager");
 const Practice = require("./practiceFunctions");
 
 class LearningCLI {
@@ -14,7 +14,6 @@ class LearningCLI {
         this.rl = readline.createInterface({
             input: process.stdin,
             output: process.stdout,
-            prompt: 'learning-cli> '
         });
         this.currentLanguage = readDefaultConfig();
         this.config = readConfig(this.currentLanguage);
@@ -30,14 +29,15 @@ class LearningCLI {
         this.showMenu = this.showMenu.bind(this);
     }
 
-    async askQuestion(query) {
-        return new Promise((resolve) => {
+    askQuestion(query) {
+        return new Promise(resolve => {
             this.rl.question(query, resolve);
         });
     }
 
     async startPractice() {
         const practice = new Practice(this.rl, this.config, this.showMenu);
+
         await practice.start();
     }
 
@@ -51,7 +51,7 @@ class LearningCLI {
     5. Practice
     0. Exit
     `);
-        const answer = +(await this.askQuestion(`Choose an option: `)).trim();
+        const answer = Number((await this.askQuestion("Choose an option: ")).trim());
 
         if (answer === 0) {
             console.log("Exiting the Language Learning CLI.");
@@ -69,22 +69,21 @@ class LearningCLI {
     };
 
     async addWord() {
-        const nativeWord = await this.askQuestion('Enter the word in your language: ');
-        const learnedWord = await this.askQuestion('Enter the word in the language you learn: ');
-        const nativeDefinition = await this.askQuestion('Enter the definition in your language: ');
-        const learnedDefinition = await this.askQuestion('Enter the definition in the language you learn: ');
-        const word = { nativeWord, learnedWord, nativeDefinition, learnedDefinition };
+        const nativeWord = (await this.askQuestion("Enter the word in your language: ")).trim().toLowerCase();
+        const learnedWord = (await this.askQuestion("Enter the word in the language you learn: ")).trim().toLowerCase();
+        const learnedDefinition = (await this.askQuestion("Enter the definition in the language you learn: ")).trim().toLowerCase();
+        const word = { nativeWord, learnedWord, learnedDefinition };
         this.config.push(word);
         appendToConfig(this.currentLanguage, word);
         console.log('Word added successfully!');
     };
 
-    async viewWords() {
+   viewWords() {
         if (this.config.length === 0) {
-            console.log('No words added yet.');
+            console.log("No words added yet.");
         } else {
             this.config.forEach((word, index) => {
-                console.log(`${index + 1}. ${word.nativeWord} - ${word.learnedWord} - ${word.nativeDefinition} - ${word.learnedDefinition}`);
+                console.log(`${index + 1}. ${word.nativeWord} - ${word.learnedWord} - ${word.learnedDefinition}`);
             });
         }
     };
@@ -94,9 +93,12 @@ class LearningCLI {
         languages.forEach((value, index) => {
             console.log(`${index + 1}. ${value}`);
         });
-        const input = (await this.askQuestion('Enter the index of the language or type a name of a language to create one (english, spanish, etc.): ')).trim();
-        const num = +input;
-        if (num) {
+        const input = (await this.askQuestion(
+            "Enter the index of the language or type a name of a language to create one (english, spanish, etc.): "))
+            .trim();
+
+        const num = Number(input);
+        if (!isNaN(num)) {
             if (num >= 1 && num <= languages.length) {
                 this.currentLanguage = languages[num - 1];
             } else {
@@ -109,11 +111,14 @@ class LearningCLI {
         this.config = readConfig(this.currentLanguage);
         writeDefaultConfig(this.currentLanguage);
         console.log(`Language changed to ${this.currentLanguage}`);
-    };
+    }
 
     async removeWord() {
-        await this.viewWords();
-        const index = +(await this.askQuestion('Enter the index of the word to remove or type 0 to abort: ')).trim();
+        this.viewWords();
+        const index = Number((await this.askQuestion(
+            "Enter the index of the word to remove or type 0 to abort: "))
+            .trim());
+
         if (index === 0) {
             console.log("Aborted removing");
             return;
@@ -121,7 +126,7 @@ class LearningCLI {
         try {
             this.config.splice(index - 1, 1);
             rewriteConfig(this.currentLanguage, this.config);
-            console.log('Word removed successfully!');
+            console.log("Word removed successfully!");
         } catch (err) {
             console.log("Invalid index.");
             console.log(`## ${err.message}`);
