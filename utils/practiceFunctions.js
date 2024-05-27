@@ -21,8 +21,10 @@ class Practice {
         }
     }
 
-    askQuestion(query) {
-        return new Promise(resolve => this.rl.question(query, resolve));
+    async askQuestion(query) {
+        return new Promise((resolve) => {
+            this.rl.question(query, resolve);
+        });
     }
 
     async showMenu() {
@@ -41,10 +43,9 @@ class Practice {
         let num = (space === -1) ? 1 : +answer.slice(space + 1);
         if (num < 1)
             num = 1;
-        if (index && index >= 0 && index <= this.methods.length) {
+        if (!isNaN(index) && index >= 0 && index <= this.methods.length) {
             if (index === 0) {
-                this.callback();
-                return;
+                return this.callback();
             }
 
             await this.practiceFunc(index-1, num)
