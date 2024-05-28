@@ -37,7 +37,6 @@ class LearningCLI {
 
   async startPractice() {
     const practice = new Practice(this.rl, this.config, this.showMenu);
-
     await practice.start();
   }
 
@@ -150,13 +149,12 @@ class LearningCLI {
       return;
     }
 
-    try {
+    if (index > 0 && index <= this.config.length) {
       this.config.splice(index - 1, 1);
       rewriteConfig(this.currentLanguage, this.config);
       console.log("Word removed successfully!");
-    } catch (err) {
+    } else {
       console.log("Invalid index.");
-      console.log(`## ${err.message}`);
     }
   }
 }

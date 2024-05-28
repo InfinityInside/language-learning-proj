@@ -45,22 +45,15 @@ class Practice {
       )
     ).trim();
 
-    const space = answer.indexOf(" ");
-    let index = Number(answer.slice(0, space));
-    let num = Number(answer.slice(space + 1));
+    const [index, num] = answer.split(" ").map(Number);
+    const practiceIndex = isNaN(index) ? 0 : index;
+    const repeatNum = isNaN(num) ? 1 : num;
 
-    if (space === -1) {
-      index = Number(answer);
-      num = 1;
-    }
-
-    if (num < 1) num = 1;
-
-    if (!isNaN(index) && index >= 0 && index <= this.methods.length) {
-      if (index === 0) {
+    if (practiceIndex >= 0 && practiceIndex <= this.methods.length) {
+      if (practiceIndex === 0) {
         return this.callback();
       }
-      await this.practiceFunc(index - 1, num);
+      await this.practiceFunc(practiceIndex - 1, repeatNum);
     } else {
       console.log("Invalid option!");
       await this.showMenu();
@@ -75,110 +68,103 @@ class Practice {
       if (completed.result) {
         score++;
         console.log("Correct!");
-        continue;
+      } else {
+        console.log(`Incorrect. The correct answer is '${completed.correct}'`);
       }
-      console.log(`Incorrect. The correct answer is '${completed.correct}'`);
     }
-    console.log();
+    console.log(); // empty line for better visual
     console.log(`You scored ${score} out of ${num}`);
     await this.showMenu();
   }
 
   async translation(word) {
-    const answer = (
-      await this.askQuestion(
-        `What is the word for '${word.nativeWord}' in the language you are learning? `,
-      )
-    )
-      .trim()
-      .toLowerCase();
-    const correct = word.learnedWord.trim().toLowerCase();
-    const result = answer === correct;
-    return { result, correct };
+    return this.checkAnswer(
+      `What is the word for '${word.nativeWord}' in the language you are learning? `,
+      word.learnedWord,
+    );
   }
 
   async reverseTranslation(word) {
-    const answer = (
-      await this.askQuestion(
-        `What is the word for '${word.learnedWord}' in your language? `,
-      )
-    )
-      .trim()
-      .toLowerCase();
-
-    const correct = word.nativeWord.trim().toLowerCase();
-    const result = answer === correct;
-    return { result, correct };
+    return this.checkAnswer(
+      `What is the word for '${word.learnedWord}' in your language? `,
+      word.nativeWord,
+    );
   }
 
   async definition(word) {
-    const answer = (
-      await this.askQuestion(
-        `What is the word that matches this definition? \n ${word.learnedDefinition} - `,
-      )
-    )
-      .trim()
-      .toLowerCase();
-
-    const correct = word.learnedWord.trim().toLowerCase();
-    const result = answer === correct;
-    return { result, correct };
+    return this.checkAnswer(
+      `What is the word that matches this definition? \n ${word.learnedDefinition} - `,
+      word.learnedWord,
+    );
   }
 
   async matchingGame(word) {
     const total = 5;
     if (this.config.length < total) {
       console.log("Insufficient number of words.");
-      return { result: false, correct: " " };
+      return { result: false, correct: "" };
     }
 
-    const words = [word];
-    while (words.length < total) {
-      const randomWord =
-        this.config[Math.floor(Math.random() * this.config.length)];
-      if (!words.includes(randomWord)) {
-        words.push(randomWord);
-      }
-    }
-
-    const options = words.map((word) => word.learnedWord);
-    const randomOptions = [...options].sort(() => Math.random() - 0.45);
+    const words = this.getRandomWords(total, word);
+    const options = words.map((w) => w.learnedWord);
+    const randomOptions = this.shuffleArray([...options]);
 
     console.log("Match the words:");
-    words.forEach((word, index) => {
-      console.log(`${index + 1}. ${word.nativeWord}`);
+    words.forEach((w, i) => {
+      console.log(`${i + 1}. ${w.nativeWord}`);
     });
 
     console.log();
-
-    const correctPairs = [];
-
-    randomOptions.forEach((option, index) => {
-      const char = String.fromCharCode(97 + index);
-      console.log(`${char}. ${option}`);
-      correctPairs.push(`${options.indexOf(option) + 1}${char}`);
+    randomOptions.forEach((option, i) => {
+      console.log(`${String.fromCharCode(97 + i)}. ${option}`);
     });
 
-    correctPairs.sort((a, b) => a[0] - b[0]);
-
-    const answer = await this.askQuestion(
-      'Enter your answers in the format "1a 2b 3c ...": ',
+    const correctPairs = options.map(
+      (option, i) =>
+        `${i + 1}${String.fromCharCode(97 + randomOptions.indexOf(option))}`,
     );
-    const pairs = answer.trim().split(" ");
-    let right = 0;
 
-    for (let i = 0; i < pairs.length; i++) {
-      if (pairs[i] === correctPairs[i]) right++;
-    }
-    const correct = correctPairs.join(" ");
-    const result = right === total;
+    const answer = (
+      await this.askQuestion(
+        'Enter your answers in the format "1a 2b 3c ...": ',
+      )
+    ).trim();
+
+    const pairs = answer.split(" ");
+    const right = pairs.filter((pair, i) => pair === correctPairs[i]).length;
+
     console.log(`You got ${right} out of ${words.length} correct.`);
-    return { result, correct };
+    return { result: right === total, correct: correctPairs.join(" ") };
   }
 
   async random(word) {
-    const index = Math.floor(Math.random() * (this.methods.length - 1));
-    return this.methods[index](word);
+    const randomIndex = Math.floor(Math.random() * (this.methods.length - 1)); // -1, because we do not want to call this method again
+    return this.methods[randomIndex](word);
+  }
+
+  async checkAnswer(question, correctAnswer) {
+    const answer = (await this.askQuestion(question)).trim().toLowerCase();
+    const correct = correctAnswer;
+    const result = answer === correct;
+    return { result, correct };
+  }
+
+  getRandomWords(count, firstWord) {
+    const words = new Set([firstWord]);
+    while (words.size < count) {
+      const randomWord =
+        this.config[Math.floor(Math.random() * this.config.length)];
+      words.add(randomWord);
+    }
+    return Array.from(words);
+  }
+
+  shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
   }
 }
 

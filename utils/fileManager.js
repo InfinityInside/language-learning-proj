@@ -11,8 +11,9 @@ const readConfig = (language) => {
   }
   const data = fs.readFileSync(filePath, "utf8");
   return data
+    .trim()
     .split("\n")
-    .filter((line) => line)
+    .filter((line) => line) // excluding empty lines
     .map((line) => {
       const [nativeWord, learnedWord, learnedDefinition] = line.split(";-;");
       return { nativeWord, learnedWord, learnedDefinition };
@@ -45,7 +46,7 @@ const readDefaultConfig = () => {
     fs.writeFileSync(filePath, "english");
     return "english";
   }
-  return fs.readFileSync(filePath, "utf8");
+  return fs.readFileSync(filePath, "utf8").trim();
 };
 
 const writeDefaultConfig = (defaultLanguage) => {
@@ -56,8 +57,8 @@ const writeDefaultConfig = (defaultLanguage) => {
 const getLanguages = () =>
   fs
     .readdirSync("config")
-    .filter((value) => value !== "defaultConfig.txt")
-    .map((value) => value.slice(0, value.lastIndexOf(".")));
+    .filter((file) => file !== "defaultConfig.txt" && file.endsWith(".txt"))
+    .map((file) => file.slice(0, file.lastIndexOf("."))); // extracting file's name without .txt
 
 module.exports = {
   readConfig,
