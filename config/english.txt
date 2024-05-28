@@ -1,0 +1,30 @@
+ліс;-;forest;-;A large area covered chiefly with trees and undergrowth.
+будинок;-;house;-;A building for human habitation.
+книга;-;book;-;A written or printed work consisting of pages glued or sewn together.
+машина;-;car;-;A road vehicle, typically with four wheels, powered by an internal combustion engine.
+річка;-;river;-;A large natural stream of water flowing in a channel to the sea, a lake, or another such stream.
+дорога;-;road;-;A wide way leading from one place to another, especially one with a specially prepared surface.
+місто;-;city;-;A large town.
+хліб;-;bread;-;Food made of flour, water, and yeast mixed together and baked.
+сонце;-;sun;-;The star around which the earth orbits.
+місяць;-;moon;-;The natural satellite of the earth, visible (chiefly at night) by reflected light from the sun.
+сім'я;-;family;-;A group consisting of parents and children living together in a household.
+друг;-;friend;-;A person whom one knows and with whom one has a bond of mutual affection.
+школа;-;school;-;An institution for educating children.
+вода;-;water;-;A colorless, transparent, odorless liquid that forms the seas, lakes, rivers, and rain.
+сніг;-;snow;-;Atmospheric water vapor frozen into ice crystals and falling in light white flakes.
+літак;-;plane;-;A powered flying vehicle with fixed wings and a weight greater than that of the air it displaces.
+лікар;-;doctor;-;A person who is qualified to treat people who are ill.
+літак;-;airplane;-;A powered flying vehicle with fixed wings and a weight greater than that of the air it displaces.
+дерево;-;tree;-;A woody perennial plant, typically having a single stem or trunk growing to a considerable height.
+кіт;-;cat;-;A small domesticated carnivorous mammal with soft fur, a short snout, and retractable claws.
+собака;-;dog;-;A domesticated carnivorous mammal that typically has a long snout and an acute sense of smell.
+сад;-;garden;-;A piece of ground adjoining a house, in which grass, flowers, and shrubs may be grown.
+шапка;-;hat;-;A shaped covering for the head worn for warmth, as a fashion item, or as part of a uniform.
+рука;-;hand;-;The end part of a person's arm beyond the wrist, including the palm, fingers, and thumb.
+нога;-;leg;-;Each of the limbs on which a person or animal walks and stands.
+гора;-;mountain;-;A large natural elevation of the earth's surface rising abruptly from the surrounding level.
+озеро;-;lake;-;A large body of water surrounded by land.
+чашка;-;cup;-;A small bowl-shaped container for drinking from, typically having a handle.
+стіл;-;table;-;A piece of furniture with a flat top and one or more legs, providing a level surface for eating, writing, or working.
+вікно;-;window;-;An opening in the wall or roof of a building or vehicle that is fitted with glass.

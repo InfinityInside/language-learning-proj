@@ -44,6 +44,10 @@ The **Language Learning CLI** is a command-line application designed to help use
 - **0. Exit**: Exit the application.
 
 ## Configuration Files
-
+- Created and modified by user's interaction with cli.
 - **config/defaultConfig.txt**: Stores the default language.
 - **config/{language}.txt**: Stores the vocabulary words for each language in the format `nativeWord;-;learnedWord;-;learnedDefinition`.
+   - Cloned repo comes with english.txt in config folder in order to allow you test the project without wasting time to add words. You can delete this file to remove the prepared configuration.
+
+
+
