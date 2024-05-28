@@ -1,2 +1,5 @@
 # language-learning-proj
-### WIP
+### A simple project 
+#### Clone the repo
+#### cd language-learning-proj
+#### node index.js
