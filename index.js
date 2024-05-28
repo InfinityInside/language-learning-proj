@@ -1,11 +1,11 @@
 const LearningCLI = require("./utils/learningCLI");
 
 const start = async () => {
-    const cli = new LearningCLI();
+  const cli = new LearningCLI();
 
-    await cli.showMenu();
+  await cli.showMenu();
 };
 
-start().catch(err => {
-    console.error("An error occurred:", err);
+start().catch((err) => {
+  console.error("An error occurred:", err);
 });
