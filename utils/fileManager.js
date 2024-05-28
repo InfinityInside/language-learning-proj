@@ -34,7 +34,7 @@ const rewriteConfig = (language, config) => {
         `${word.nativeWord};-;${word.learnedWord};-;${word.learnedDefinition}`,
     )
     .join("\n");
-  fs.writeFileSync(filePath, data);
+  fs.writeFileSync(filePath, data + "\n");
 };
 
 const readDefaultConfig = () => {
